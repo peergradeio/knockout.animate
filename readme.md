@@ -67,21 +67,44 @@ You can add `in` and `out` animation this way:
 
 First animation will be played when `state` field become `true` and second when `false`.
 
-Assign custom handler on state change
--------------------------------------
+Assign custom handlers on state change
+--------------------------------------
+The `before` and `after`
 
 ```html
-<div data-bind="animate:{ animation: 'zoomIn', state: state, handler: handler"></div>
+<div data-bind="animate:{ animation: 'zoomIn', state: state, before: beforeAnimate, after: afterAnimate }, text: message">
+  Hello World!
+</div>
 ```
 
 ```js
 function Viewmodel(){
   this.state = ko.observable(true);
+  this.message = ko.observable('Hello World!');
   
-  this.handler = function(event, state){
-    //do something here
+  this.afterAnimate = function(event, state){
+    this.message = ko.observable('Goodbye World!');
   }
 }
 
 ko.applyBindings(new Viewmodel());
 ```
+
+removeClass and animation-fill-mode: forwards
+---------------------------------------------
+In some cases you may not want to remove the animation class (`bounceInRight`...)
+after the animation has finished.
+
+This can be the case when using the CSS property `animation-fill-mode: forwards`.
+
+In that case you can set the option `removeClass` to `false`:
+
+```html
+<div data-bind="animate:{ animation: 'zoomIn', state: state, removeClass: false }">
+  Hello World!
+</div>
+```
+
+The class will then only be removed when `state` is toggled again.
+
+Reference: <https://developer.mozilla.org/en/docs/Web/CSS/animation-fill-mode>

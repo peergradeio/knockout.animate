@@ -35,7 +35,7 @@
         }
     }
 
-    function removeClass(ele, cls) {
+    function _removeClass(ele, cls) {
         if (hasClass(ele, cls)) {
             var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
             ele.className = ele.className.replace(reg, ' ')
@@ -43,17 +43,23 @@
         }
     }
 
-    function doAnimationWork(element, animation, before, after, state) {
+    function doAnimationWork(element, animation, before, after, state, removeClass) {
         if (typeof before === 'function') {
             before(animation, state);
+        }
+        if (removeClass === false) {
+            _removeClass(element, baseAnimateClass);
+            _removeClass(element, animation);
         }
         addClass(element, baseAnimateClass);
         addClass(element, animation);
 
         var eventSubscription = function(event){
             removePrefixedEvent(element, "AnimationEnd", eventSubscription);
-            removeClass(element, baseAnimateClass);
-            removeClass(element, animation);
+            if (removeClass !== false) {
+                _removeClass(element, baseAnimateClass);
+                _removeClass(element, animation);
+            }
 
             if (typeof after === 'function') {
                 after(animation, state, event);
@@ -107,11 +113,12 @@
             toggle = animationOn !== animationOff;
             before = ko.unwrap(data.before) || undefined;
             after = ko.unwrap(data.after) || undefined;
+            removeClass = ko.unwrap(data.removeClass) || undefined;
 
             if (state) {
-                doAnimationWork(element, animationOn, before, after, state);
+                doAnimationWork(element, animationOn, before, after, state, removeClass);
             } else if (toggle) {
-                doAnimationWork(element, animationOff, before, after, state);
+                doAnimationWork(element, animationOff, before, after, state, removeClass);
             }
         }
     };
