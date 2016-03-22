@@ -78,7 +78,7 @@
                 throw new Error('Animation property must be defined');
             }
 
-            if (!data.state) {
+            if (!data.state === undefined) {
                 throw new Error('State property must be defined');
             }
 
@@ -102,7 +102,7 @@
                 throw new Error('Animation property must be defined');
             }
 
-            if (!data.state) {
+            if (data.state === undefined) {
                 throw new Error('State property must be defined');
             }
 
