@@ -9,6 +9,7 @@
     "amd",
     "globals"
   ],
+  "main": "src/knockout.animate.js",
   "license": "MIT",
   "ignore": [
     "**/.*",
